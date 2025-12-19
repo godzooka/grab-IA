@@ -39,6 +39,33 @@
  
  ---
  
+ # ## 🛠️ Installation & Setup
+ 
+ It is highly recommended to run this tool in a Python Virtual Environment (venv) to keep your global system dependencies clean.
+ 
+ ### 1. Clone or Save the Files
+ Ensure `grab-IA.py` and `grabia_core.py` are in the same directory.
+ 
+ ### 2. Create the Virtual Environment
+ Open your terminal in the project folder and run:
+ 
+ ```bash
+ python3 -m venv venv
+ ```
+ 
+ ### 3. Activate and Install Dependencies
+ Activate the environment and install the required libraries:
+ 
+ ```bash
+ # On macOS/Linux:
+ source venv/bin/activate
+ 
+ # On Windows:
+ # venv\Scripts\activate
+ 
+ pip install internetarchive rich requests
+ ```
+ 
  ## 🛠️ Quick Start
  
  ### Prerequisites

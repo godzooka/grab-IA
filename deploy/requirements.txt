@@ -1,0 +1,4 @@
+internetarchive
+rich
+requests
+python-dotenv

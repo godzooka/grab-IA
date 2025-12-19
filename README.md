@@ -16,11 +16,6 @@
  * **Bandwidth Management:** Built-in "token-bucket" throttling to respect your network's limits.
  * **Container Ready:** Includes deployment logic to maintain a `deploy/` folder for easy environment isolation.
  
- ## 📦 Self-Packaging Logic
- 
- `grab-IA` includes a built-in deployment initializer. When the script runs, it automatically prepares a `deploy/` directory containing:
- * A standalone `requirements.txt`
- * Portable copies of the core logic (`grabIA.py` and `grabia_core.py`)
  
  ---
  
@@ -47,7 +42,10 @@
  python3 -m venv venv
  ```
  
- ### 3. Activate and Install Dependencies
+ ### 3. Activate and Install Dependencies 
+ 
+ *Requires Python 3.8+*
+ 
  ```bash
  # On macOS/Linux:
  source venv/bin/activate
@@ -97,7 +95,7 @@
  | :--- | :--- |
  | `deploy/grabIA.py` | The main entry point for the tool. |
  | `deploy/grabia_core.py` | The underlying engine handling threads and SQLite. |
- | `deploy/requirements.txt` | Used to install dependencies in a fresh environment via `pip install -r`. | ---
+ | `deploy/requirements.txt` | Used to install dependencies in a fresh environment via `pip install -r`. | 
  
  ### 🐳 Running with Docker
  

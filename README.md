@@ -76,7 +76,7 @@
  
  ### Example Usage
  ```bash
- python3 grabIA.py my_items.txt -w 8 -f mp4 --limit 5m
+ python3 <path/to/grabIA.py> <path/to/my_items.txt> -w 8 -f mp4 --limit 5m
  ```
  
  ---

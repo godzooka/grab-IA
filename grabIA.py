@@ -22,31 +22,33 @@ except ImportError:
 console = Console()
 
 def initialize_deployment():
-    # [cite_start]Updated to generate README.txt with full descriptive content [cite: 1, 2]
+    # Updated to generate README.txt with full descriptive content using a triple-quoted string
     readme_txt = Path("README.txt")
     if not readme_txt.exists():
-        content = (
-            "# 🏛️ grab-IA: Internet Archive Mass Downloader\n\n"
-            [cite_start]"**grab-IA** is a high-performance, multi-threaded archival tool designed to mirror Internet Archive (IA) items with precision. [cite: 1]\n"
-            [cite_start]"It features a real-time terminal dashboard, bandwidth throttling, and persistent resume capabilities. [cite: 2]\n\n"
-            "## 🚀 Key Features\n\n"
-            [cite_start]"* **Smart Resuming:** Uses a local SQLite database (grabia_state.db) to track every byte. [cite: 3]\n"
-            [cite_start]"* **Threaded Architecture:** Separate pools for metadata scanning and file downloading ensure maximum throughput. [cite: 5]\n"
-            [cite_start]"* **Precision Filtering:** Support for both simple extension filtering and complex Regex patterns. [cite: 6]\n"
-            [cite_start]"* **Bandwidth Management:** Built-in 'token-bucket' throttling to respect your network's limits. [cite: 7]\n"
-            [cite_start]"* **Container Ready:** Includes deployment logic to maintain a deploy/ folder for easy environment isolation. [cite: 8]\n"
-        )
+        content = """# 🏛️ grab-IA: Internet Archive Mass Downloader
+
+**grab-IA** is a high-performance, multi-threaded archival tool designed to mirror Internet Archive (IA) items with precision.
+It features a real-time terminal dashboard, bandwidth throttling, and persistent resume capabilities.
+
+## 🚀 Key Features
+
+* **Smart Resuming:** Uses a local SQLite database (grabia_state.db) to track every byte.
+* **Threaded Architecture:** Separate pools for metadata scanning and file downloading ensure maximum throughput.
+* **Precision Filtering:** Support for both simple extension filtering and complex Regex patterns.
+* **Bandwidth Management:** Built-in 'token-bucket' throttling to respect your network's limits.
+* **Container Ready:** Includes deployment logic to maintain a deploy/ folder for easy environment isolation.
+"""
         readme_txt.write_text(content, encoding="utf-8")
     
-    # [cite_start]Maintain deploy folder for build context integrity without auto-generating Dockerfile [cite: 8]
+    # Maintain deploy folder for build context integrity without auto-generating Dockerfile
     deploy_dir = Path("deploy")
     deploy_dir.mkdir(exist_ok=True)
     
     req_file = deploy_dir / "requirements.txt"
     if not req_file.exists():
-        [cite_start]req_file.write_text("internetarchive\nrich\nrequests\npython-dotenv\n") [cite: 29]
+        req_file.write_text("internetarchive\nrich\nrequests\npython-dotenv\n")
     
-    # [cite_start]Copy source modules to deploy directory to maintain original functionality [cite: 30]
+    # Copy source modules to deploy directory to maintain original functionality
     for f_name in ["grabIA.py", "grabia_core.py"]:
         src = Path(f_name)
         if src.exists():

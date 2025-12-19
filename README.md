@@ -66,7 +66,7 @@
  pip install internetarchive rich requests
  ```
  
- ## 🛠️ Quick Start
+ ### 🛠️ Quick Start
  
  ### Prerequisites
  * Python 3.8+
@@ -79,7 +79,29 @@
  
  ### Usage
  ```bash
- python grabIA.py ids.txt --output ./my_archive --workers 8 --limit 5MB
+ python3 <path/to/grabIA.py> <path/to/item_list> <arg> 
+ 
+ # ## ⚙️ Command Line Arguments
+ 
+ You can customize the behavior of the downloader using the following flags:
+ 
+ | Argument | Description | Default |
+ | :--- | :--- | :--- |
+ | `input` | **(Required)** Path to a text file containing Internet Archive Item IDs (one per line). | N/A |
+ | `-o`, `--output` | The directory where files will be saved. | `downloads` |
+ | `-w`, `--workers` | Number of simultaneous download threads. | `4` |
+ | `-f`, `--format` | Comma-separated list of file extensions to download (e.g., `mp3,pdf`). | All |
+ | `-l`, `--limit` | Global speed limit (e.g., `500k`, `2m` for 2MB/s). | Unlimited |
+ | `--include` | Regex pattern: only download files matching this name. | None |
+ | `--exclude` | Regex pattern: skip files matching this name. | None |
+ | `--username` | Your Internet Archive email/username. | None |
+ | `--password` | Your Internet Archive password. | None |
+ 
+ ### Example Usage
+ 
+ ```bash
+ python3 grabIA.py my_items.txt -w 8 -f mp4 --limit 5m
+ ```
  ```
  
  ---

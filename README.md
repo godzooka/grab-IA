@@ -79,9 +79,55 @@
  python3 <path/to/grabIA.py> <path/to/my_items.txt> -w 8 -f mp4 --limit 5m
  ```
  
- ---
+ ## 📦 Understanding Self-Packaging Logic
  
- ## ❤️ Support the Internet Archive
+ Unlike traditional scripts that require manual file management, **grab-IA** includes a built-in deployment initializer. This feature is designed to make the tool "portable" for use on remote servers, NAS devices, or within CI/CD pipelines.
+ 
+ ### How the `deploy/` Folder Works
+ Every time you run the script, it checks for and maintains a `deploy/` directory with the following logic:
+ 
+ * **Environment Isolation**: It generates a standalone `requirements.txt` containing only the necessary libraries: `internetarchive`, `rich`, `requests`, and `python-dotenv`.
+ * **Code Portability**: It creates exact copies of the core logic (`grabIA.py` and `grabia_core.py`) inside the folder.
+ * **Configuration Readiness**: It ensures a basic `README.md` is present to guide any user who receives the bundled folder.
+ 
+ ### When to Use This
+ This logic is particularly useful if you develop or configure your download lists on a local machine but want to "ship" a clean, ready-to-run version of the tool to a high-bandwidth server. You can simply zip the `deploy/` folder and move it—everything needed to run the tool (minus the Python interpreter itself) is inside.
+ 
+ | Component | Purpose |
+ | :--- | :--- |
+ | `deploy/grabIA.py` | The main entry point for the tool. |
+ | `deploy/grabia_core.py` | The underlying engine handling threads and SQLite. |
+ | `deploy/requirements.txt` | Used to install dependencies in a fresh environment via `pip install -r`. | ---
+ 
+ ### 🐳 Running with Docker
+ 
+ [cite_start]**grab-IA** is fully containerized for users who prefer not to manage local Python environments[cite: 7]. [cite_start]The Docker image handles all dependencies and uses a volume to ensure your database and downloads persist[cite: 8].
+ 
+ ### 1. Build the Image
+ From the root of the project directory, run:
+ ```bash
+ docker build -t grab-ia .
+ ```
+ 
+ ### 2. Run the Container
+ To run the tool, you must mount a local directory to `/app/downloads` so the files are saved to your host machine.
+ 
+ **Basic command:**
+ ```bash
+ docker run -v $(pwd)/downloads:/app/downloads grab-ia <path_to_ids.txt>
+ ```
+ 
+ **Advanced command (with limits and workers):**
+ ```bash
+ docker run -v $(pwd)/downloads:/app/downloads grab-ia example_ids.txt -w 8 --limit 5m
+ ```
+ 
+ ### 💡 Docker Tips
+ * **Persistence**: The SQLite database (`grabia_state.db`) is stored inside the `/app/downloads` volume. Even if you delete the container, your progress is saved on your host machine.
+ * **Environment Variables**: You can pass your IA credentials via Docker environment variables instead of command-line arguments:
+    `docker run -e IA_USER='your_email' -e IA_PASS='your_password' ...`
+ 
+ ### ❤️ Support the Internet Archive
  
  **grab-IA** is a tool built to interface with the [Internet Archive](https://archive.org), a 501(c)(3) non-profit digital library.
  

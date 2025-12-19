@@ -1,0 +1,4 @@
+internetarchive==4.1.0
+rich
+requests
+python-dotenv

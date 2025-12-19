@@ -1,0 +1,16 @@
+
+
+# 1. Underground Press (High file count - good for testing scanning/concurrency)
+lp_the-rag_austin-tx
+internationaltimes
+fifth-estate-detroit
+
+# 2. Multimedia & Video (Large files - good for testing speed/ETA/progress bars)
+0532_Hells_Angels_on_Wheels_The_01_00_40_00
+TenForTwo
+
+# 3. Live Music (FLAC/SHN - good for testing metadata/MD5)
+gd80-12-12.set1-aud.vernon.16906.sbeok.shnf
+
+# 4. Digital History (Software/PDF mix)
+TheWholeEarthSoftwareCatalog1984

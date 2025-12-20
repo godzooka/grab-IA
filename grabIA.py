@@ -53,12 +53,10 @@ It uses a local SQLite database to ensure no bandwidth is wasted on redundant da
 It is highly recommended to run this tool in a Python Virtual Environment (venv). 
 
 1. **Clone or Save the Files:** Ensure `grabIA.py` and `grabia_core.py` are in the same directory. 
-2. **Create the Virtual Environment:** 
-   ```bash
+2. **Create the Virtual Environment:** ```bash
    python3 -m venv venv
    ```
-3. **Activate and Install Dependencies:** *Requires Python 3.8+* 
-   * On macOS/Linux: `source venv/bin/activate` 
+3. **Activate and Install Dependencies:** *Requires Python 3.8+* * On macOS/Linux: `source venv/bin/activate` 
    * On Windows: `venv\\Scripts\\activate` 
    * `pip install internetarchive rich requests python-dotenv` 
 
@@ -83,8 +81,7 @@ It is highly recommended to run this tool in a Python Virtual Environment (venv)
 
 Unlike traditional scripts that require manual file management, **grab-IA** includes a built-in deployment initializer. 
 
-**How the `deploy/` Folder Works:** 
-Every time you run the script, it checks for and maintains a `deploy/` directory: 
+**How the `deploy/` Folder Works:** Every time you run the script, it checks for and maintains a `deploy/` directory: 
 * **Environment Isolation:** It generates a standalone `requirements.txt` containing only the necessary libraries. 
 * **Code Portability:** It creates exact copies of the core logic (`grabIA.py` and `grabia_core.py`) inside the folder. 
 * **Configuration Readiness:** It ensures a basic `README.md` is present. 
@@ -148,7 +145,10 @@ def update_display(layout, engine, current_speed):
     prog_msg = f"Job Progress: ({format_size(stats['down_bytes'])} / {format_size(max(1, stats['total_bytes']))})"
     rem_bytes = max(0, stats['total_bytes'] - stats['down_bytes'])
     eta_str = f"[bold green]{format_time(rem_bytes / current_speed)}[/]" if current_speed > 50*1024 else "---"
-    layout["header"].update(Panel(f"grab-IA Tool | Status: {'SCANNING' if stats['is_scanning'] else 'DOWNLOADING'}", border_style="blue"))
+    
+    # Updated Header Line
+    layout["header"].update(Panel(f"grab-IA Internet Archive Downloader | Status: {'SCANNING' if stats['is_scanning'] else 'DOWNLOADING'}", border_style="blue"))
+    
     st = Table.grid(padding=1)
     st.add_column(style="cyan", width=25)
     st.add_row("Scanned Archives:", f"{stats['scanned_ids']} / {stats['total_ids']}")

@@ -1,0 +1,49 @@
+grab-IA: Logic & Features Documentation
+
+Functionality 
+The tool is highly functional and robust for mass-archival tasks. It follows professional patterns for networking tools, specifically:
+* Thread Isolation: It separates "scanning" (metadata API calls) from "downloading" (heavy I/O), preventing the UI or discovery process from lagging during large transfers.
+* State Persistence: Using SQLite for state management ensures that even with 10,000+ files, the "resume" check is nearly instantaneous.
+* Graceful Degradation: It handles HTTP 416 (Requested Range Not Satisfiable) errors, which occur when a partial download is already complete or corrupted.
+
+Feature List
+
+1. Performance & Architecture
+* Multi-Threaded Discovery: Uses a ThreadPoolExecutor (up to 10 threads) to query the Internet Archive API for item metadata.
+* Concurrent Downloaders: User-configurable worker pool (default 4) for simultaneous file transfers.
+* Asynchronous Database Logging: A dedicated background thread manages SQLite operations so database disk I/O doesn't block download workers.
+
+2. Advanced Filtering
+* Extension Filtering: Simple comma-separated list support (e.g., mp3,pdf).
+* Regex Inclusion/Exclusion: Supports complex patterns to target specific file naming conventions while skipping others.
+* Metadata Skipping: Automatically ignores internal IA files like _meta.xml and archive.torrent to save space.
+
+3. Data Integrity & Resilience
+* MD5 Verification: Automatically verifies the integrity of downloaded files against the MD5 hash provided by the Internet Archive.
+* Resume Support: Uses .part files and HTTP Range headers to resume interrupted downloads.
+* Auto-Retry Logic: Configurable retry attempts for failed downloads with backoff handling.
+
+4. Bandwidth & UI
+* Token-Bucket Throttling: Precise bandwidth limiting (e.g., 500k, 2m) to prevent network congestion.
+* Live Dashboard: A rich-powered Terminal User Interface (TUI) showing individual worker progress, overall metrics, and system event logs.
+
+Logic Breakdown
+
+A. The Scanning Phase (_run_scanner)
+When the script starts, it maps the provided list of IDs into a thread pool:
+1. Metadata Fetch: Calls ia.get_item(id).
+2. Completed Check: Queries the SQLite DB to see if the file was finished in a previous session.
+3. Sanitization: The engine cleans filenames to ensure they are safe for the local OS (removing characters like * or ?).
+4. Queueing: Valid, missing files are converted into DownloadTask objects and put into a Queue.
+
+B. The Download Phase (_download_file)
+Workers pull tasks from the queue and perform the following logic:
+1. Check for Partial Work: If a .part file exists, it calculates the byte offset.
+2. Streaming Request: It opens a requests stream with a Range header if resuming.
+3. Throttling: Inside the chunk-writing loop, it calls _throttle() to check elapsed time since the last "token" (byte) was added to the bucket.
+4. Verification: Once the stream closes, it hashes the local file; if it matches IA metadata, it renames the .part to the final filename.
+
+C. The State Manager (_db_manager)
+To prevent database locking issues, the engine uses a Producer-Consumer pattern:
+* Workers (Producers): Send a "success" message to the db_queue.
+* DB Thread (Consumer): A single thread sits in a loop, pulls messages from that queue, and writes them to the SQLite file.

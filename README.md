@@ -99,7 +99,7 @@
  
  ### 🐳 Running with Docker
  
- [cite_start]**grab-IA** is fully containerized for users who prefer not to manage local Python environments[cite: 7]. [cite_start]The Docker image handles all dependencies and uses a volume to ensure your database and downloads persist[cite: 8].
+ **grab-IA** is fully containerized for users who prefer not to manage local Python environments. The Docker image handles all dependencies and uses a volume to ensure your database and downloads persist.
  
  ### 1. Build the Image
  From the root of the project directory, run:

@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Local Data and Logs
+downloads/
+grabia_state.db
+grabia_session.log
+*.part
+
+# Build and Distribution
+dist/
+build/
+*.egg-info/
+
+# Deployment (Generated at runtime)
+deploy/
+
+# Documentation
+*.md
+LICENSE

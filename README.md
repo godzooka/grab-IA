@@ -3,7 +3,7 @@
  **grab-IA** is a high-performance, multi-threaded archival tool designed to mirror Internet Archive (IA) items with mathematical precision. It features a real-time terminal dashboard, a modern Desktop GUI, and robust data integrity verification.
  
   <p align="center">
-   <img src="img/grab-IA_GUI.png" alt="grab-IA Dashboard" width="700">
+   <img src="img/grab-IA_gui.png" alt="grab-IA Dashboard" width="700">
  </p>
  
  

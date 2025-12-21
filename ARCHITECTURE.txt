@@ -1,0 +1,63 @@
+# ==============================================================================
+# 🏛️ grab-IA: Logic & Architecture Documentation
+# ==============================================================================
+
+# Overview
+# grab-IA is a high-performance, multi-threaded archival tool designed for 
+# reliable mirroring of Internet Archive (IA) items. It employs a 
+# "System-First" architecture, prioritizing data integrity (via MD5), 
+# session persistence (via SQLite), and network politeness (via throttling).
+
+# ------------------------------------------------------------------------------
+# 1. System Components
+# ------------------------------------------------------------------------------
+
+# A. Core Engine (grabia_core.py)
+# The "brain" of the application. It handles:
+# - Thread Orchestration: ThreadPoolExecutor for scanning, Queue for downloads.
+# - State Persistence: SQLite with WAL (Write-Ahead Logging).
+# - Bandwidth Control: Global "Token-Bucket" algorithm for speed limiting.
+# - Atomic MD5 Verification: Chunked hashing to ensure 100% data integrity.
+
+# B. Desktop GUI (grabia_gui.py)
+# - Modern interface built with CustomTkinter.
+# - Async Monitoring: Thread-safe polling loop to update stats without lag.
+
+# C. Bootstrapper (launcher.pyw)
+# - Automated VENV manager: Ensures dependencies are synced before launch.
+
+# ------------------------------------------------------------------------------
+# 2. The Archival Lifecycle
+# ------------------------------------------------------------------------------
+
+# Phase 1: Discovery (The Scanner)
+# 1. Resolution: Converts queries/IDs into specific item identifiers.
+# 2. Metadata Inspection: Fetches file manifests from IA S3 API.
+# 3. Filtering: Applies Regex/Extension rules and checks SQLite deduplication.
+
+# Phase 2: Execution (The Workers)
+# 1. Resume Check: Uses HTTP 'Range' headers if a .part file exists.
+# 2. Throttled Stream: Data is gated by the engine's global speed limit.
+# 3. Verification: Calculated MD5 is compared against IA metadata post-download.
+# 4. Finalization: Safe-rename (Atomic Swap) moves file to final path on success.
+
+
+
+# ------------------------------------------------------------------------------
+# 3. DATA INTEGRITY & RESILIENCE 
+# ------------------------------------------------------------------------------
+# | Feature       | Implementation      | Purpose                               |
+# | :------------ | :------------------ | :------------------------------------ |
+# | Persistence   | SQLite (WAL Mode)    | Ensures completion list survives crash|
+# | Integrity     | Atomic Rename       | Prevents partial files from appearing |
+# |               |                     | as finished in the local filesystem.  |
+# | Validation    | Chunked MD5         | Detects bit-rot or network corruption |
+# |               |                     | using memory-efficient 1MB streams.   |
+# | Resilience    | HTTP Range          | Resumes large files where they stopped|
+# | Safety        | Thread Locking      | Prevents race conditions during multi-|
+# |               |                     | threaded database/stat updates.       |
+# ------------------------------------------------------------------------------
+
+# 4. Deployment Logic
+# - Docker: Headless environment mapping /app/downloads to host volumes.
+# - Logging: RotatingFileHandler (5MB limit) to prevent disk exhaustion.

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grab-ia"
+version = "1.0.0"
+description = "High-performance multi-threaded Internet Archive mass downloader with MD5 verification."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Nathaniel Osborne"}
+]
+# Updated dependencies to match your requirements.txt
+dependencies = [
+    "internetarchive",
+    "rich",
+    "requests",
+    "python-dotenv",
+    "customtkinter",
+    "darkdetect",
+    "pillow"
+]
+
+[project.scripts]
+# This allows users to just type 'grabia' in their terminal to start the TUI
+grabia = "grabIA:main"
+
+[tool.setuptools]
+py-modules = ["grabIA", "grabia_core", "grabia_gui"]

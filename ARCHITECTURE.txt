@@ -1,63 +1,102 @@
-# ==============================================================================
-# 🏛️ grab-IA: Logic & Architecture Documentation
-# ==============================================================================
+==============================================================================
+🏛️ grab-IA: Logic & Architecture Documentation
+==============================================================================
+1. System Overview
 
-# Overview
-# grab-IA is a high-performance, multi-threaded archival tool designed for 
-# reliable mirroring of Internet Archive (IA) items. It employs a 
-# "System-First" architecture, prioritizing data integrity (via MD5), 
-# session persistence (via SQLite), and network politeness (via throttling).
+grab-IA is a high-performance, multi-threaded archival tool designed for reliable mirroring of Internet Archive (IA) items. It employs a "System-First" architecture, prioritizing data integrity, session persistence, and network politeness.
 
-# ------------------------------------------------------------------------------
-# 1. System Components
-# ------------------------------------------------------------------------------
 
-# A. Core Engine (grabia_core.py)
-# The "brain" of the application. It handles:
-# - Thread Orchestration: ThreadPoolExecutor for scanning, Queue for downloads.
-# - State Persistence: SQLite with WAL (Write-Ahead Logging).
-# - Bandwidth Control: Global "Token-Bucket" algorithm for speed limiting.
-# - Atomic MD5 Verification: Chunked hashing to ensure 100% data integrity.
+2. Component Architecture
+The application is divided into four distinct layers:
 
-# B. Desktop GUI (grabia_gui.py)
-# - Modern interface built with CustomTkinter.
-# - Async Monitoring: Thread-safe polling loop to update stats without lag.
+A. The Core Engine (grabia_core.py)
+The engine is the "brain" of the application, responsible for orchestration and data safety.
 
-# C. Bootstrapper (launcher.pyw)
-# - Automated VENV manager: Ensures dependencies are synced before launch.
 
-# ------------------------------------------------------------------------------
-# 2. The Archival Lifecycle
-# ------------------------------------------------------------------------------
-
-# Phase 1: Discovery (The Scanner)
-# 1. Resolution: Converts queries/IDs into specific item identifiers.
-# 2. Metadata Inspection: Fetches file manifests from IA S3 API.
-# 3. Filtering: Applies Regex/Extension rules and checks SQLite deduplication.
-
-# Phase 2: Execution (The Workers)
-# 1. Resume Check: Uses HTTP 'Range' headers if a .part file exists.
-# 2. Throttled Stream: Data is gated by the engine's global speed limit.
-# 3. Verification: Calculated MD5 is compared against IA metadata post-download.
-# 4. Finalization: Safe-rename (Atomic Swap) moves file to final path on success.
+State Persistence: Uses SQLite with Write-Ahead Logging (WAL) to track files and metadata. This ensures the archival session survives system crashes or unexpected power loss.
 
 
 
-# ------------------------------------------------------------------------------
-# 3. DATA INTEGRITY & RESILIENCE 
-# ------------------------------------------------------------------------------
-# | Feature       | Implementation      | Purpose                               |
-# | :------------ | :------------------ | :------------------------------------ |
-# | Persistence   | SQLite (WAL Mode)    | Ensures completion list survives crash|
-# | Integrity     | Atomic Rename       | Prevents partial files from appearing |
-# |               |                     | as finished in the local filesystem.  |
-# | Validation    | Chunked MD5         | Detects bit-rot or network corruption |
-# |               |                     | using memory-efficient 1MB streams.   |
-# | Resilience    | HTTP Range          | Resumes large files where they stopped|
-# | Safety        | Thread Locking      | Prevents race conditions during multi-|
-# |               |                     | threaded database/stat updates.       |
-# ------------------------------------------------------------------------------
+Thread Orchestration: Manages a ThreadPoolExecutor for high-speed metadata scanning and a dedicated Queue for worker-led file downloads.
 
-# 4. Deployment Logic
-# - Docker: Headless environment mapping /app/downloads to host volumes.
-# - Logging: RotatingFileHandler (5MB limit) to prevent disk exhaustion.
+
+Bandwidth Control: Implements a global "Token-Bucket" algorithm to gate data flow, allowing precise speed limiting (e.g., 500k, 2m).
+
+
+
+
+Network Resilience: Configures a custom requests.Session with an HTTPAdapter that includes automated retry logic (5 attempts) for 502, 503, and 504 errors.
+
+
+B. User Interfaces
+
+Desktop GUI (grabia_gui.py): A modern interface built with CustomTkinter. It uses an asynchronous monitoring loop to poll engine stats without blocking the UI thread.
+
+
+
+Terminal Dashboard (grabIA.py): A headless TUI (Terminal User Interface) powered by the Rich library, providing real-time progress bars, worker status tables, and a scrolling event console.
+
+C. Bootstrapper (launcher.pyw)
+
+Automated VENV Management: Detects the host OS and automatically creates/syncs a Python virtual environment with necessary dependencies before launching the GUI.
+
+
+
+Shortcut Logic: Programmatically generates .desktop files (Linux) or Windows shortcuts to ensure easy access.
+
+3. The Archival Lifecycle
+Archival follows a strict three-phase pipeline to ensure no data is lost or corrupted.
+
+Phase 1: Discovery (The Scanner)
+
+Resolution: Converts raw input lines (queries or IDs) into specific item identifiers using the IA search API.
+
+
+
+
+Pacing: Includes a mandatory 0.1s delay between metadata requests to avoid triggering IA rate limits.
+
+
+
+Deduplication: Queries the local SQLite database to skip files already marked as completed.
+
+
+
+
+Filtering: Applies user-defined Regex patterns (include/exclude) and extension filters to the file manifest.
+
+
+
+Phase 2: Execution (The Workers)
+
+Resume Check: Before downloading, workers check for existing .part files and use HTTP 'Range' headers to resume where they stopped.
+
+
+
+Streaming: Data is read in 1MB chunks, gated by the global speed limit.
+
+
+Verification: Once a download finishes, a chunked MD5 hash is calculated locally and compared against the IA master metadata.
+
+
+Phase 3: Finalization
+Atomic Swap: Only after MD5 verification is successful is the file renamed from .part to its final name. This prevents corrupt or partial files from ever appearing as "finished" in the filesystem.
+
+
+
+State Update: The file is recorded in the SQLite database as completed.
+
+
+Error Handling: Failed files are returned to the queue for a limited number of retries (default: 3).
+
+4. Deployment & Safety Logic
+
+Containerization: The included Dockerfile uses a lightweight Python 3.10 image, mapping /app/downloads to host volumes for persistent storage of the database and files.
+
+
+
+Self-Packaging: The program automatically maintains a deploy/ folder containing standalone copies of the engine and interface, ensuring portability.
+
+
+
+Resource Management: Log files are managed via a RotatingFileHandler with a 5MB limit to prevent disk exhaustion.

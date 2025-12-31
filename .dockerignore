@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project specific
+downloads/
+items/
+*.db
+*.db-shm
+*.db-wal
+grabia_debug.log
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (except what we need)
+*.md
+!README.md
+!DOCKER.md
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# Test files
+tests/
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Scripts (launchers not needed in container)
+launch.bat
+launch.sh
+launch.py
+
+# Images
+img/
+*.png
+*.jpg
+*.svg

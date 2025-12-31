@@ -1,0 +1,97 @@
+############################
+# Python / Virtual Envs
+############################
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+############################
+# Runtime State & Data
+############################
+
+# Download output (user data)
+downloads/
+items/
+
+# SQLite state databases
+*.db
+*.db-wal
+*.db-shm
+
+# Logs
+*.log
+grabia_debug.log
+
+############################
+# GUI / Qt
+############################
+
+# Qt cache / runtime files
+*.qmlc
+*.jsc
+*.cache
+
+############################
+# OS / Editor Noise
+############################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.lnk
+
+# Linux
+*~
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+############################
+# Docker
+############################
+
+# Docker runtime / compose overrides
+docker-compose.override.yml
+
+# Build cache (if used)
+.docker/
+
+############################
+# Packaging / Distribution
+############################
+
+# PyInstaller / build artifacts
+build/
+dist/
+*.spec
+
+############################
+# Temporary / Misc
+############################
+
+# Temp files
+tmp/
+temp/
+
+# Local config overrides (future-proof)
+config.local.*
+.env
+.env.*
+

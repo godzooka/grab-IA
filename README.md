@@ -199,16 +199,6 @@ docker run -it --rm \
 - **launch.py**: Cross-platform launcher with automatic setup
 
 
-The core engine implements battle-tested patterns:
-
-- **PROT-001**: Atomic Safe-Swap with MD5 verification
-- **PROT-002**: Global Backoff Coordination for rate limiting
-- **PROT-003**: Byte-Level Resume (HTTP 206 Range requests)
-- **ASSET-009**: Token-Bucket Rate Limiting
-- **ASSET-015**: Recursive Path Governance
-- **ASSET-022**: Dynamic Worker Scaling
-- **PERSISTENCE-001**: SQLite WAL for concurrent access
-
 ### State Management
 
 All interfaces (GUI and CLI) share the same SQLite database:

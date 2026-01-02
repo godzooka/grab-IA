@@ -331,6 +331,122 @@ item_id_3
 docker logs -f <container_id>
 ```
 
+## Directory Cleaner
+
+The Directory Cleaner is a standalone tool for maintaining 1:1 parity between your item lists and download directories. It removes orphaned files, stray `.part` files, and unwanted formats while preserving exactly what should exist according to your Internet Archive manifests.
+
+### Quick Start
+
+```bash
+# Launch the cleaner GUI
+python grabia_cleaner.py
+```
+
+### Common Use Cases
+
+**Remove unwanted formats:**
+```
+Scenario: You downloaded entire collections, but now only want MP3 files.
+Solution: Run cleaner with extension filter "mp3" to remove other formats.
+```
+
+**Clean up interrupted downloads:**
+```
+Scenario: Downloads were interrupted, leaving .part files everywhere.
+Solution: Run cleaner to remove all .part files and incomplete items.
+```
+
+**Enforce filter changes:**
+```
+Scenario: You want to apply new filters to existing downloads.
+Solution: Configure filters in cleaner to remove non-matching files.
+```
+
+**Remove excluded items:**
+```
+Scenario: You updated your item list to exclude certain items.
+Solution: Run cleaner to remove files from excluded items.
+```
+
+### Key Features
+
+- **Dry-Run Mode**: Preview changes before deleting anything
+- **Filter Compatibility**: Respects all main downloader filters (extensions, regex, metadata-only)
+- **README Preservation**: Optional toggle to keep grab-IA generated READMEs
+- **Safety First**: Confirmation dialogs and detailed logging
+- **1:1 Parity**: Ensures downloads match item list exactly
+
+### Basic Workflow
+
+1. Select your item list (same TXT/CSV used for downloads)
+2. Select your download directory
+3. Configure filters (optional)
+4. Enable dry-run mode (recommended)
+5. Review the log to see what would be deleted
+6. Uncheck dry-run and execute to perform actual deletion
+
+### What Gets Deleted
+
+The cleaner removes:
+- ✅ `.part` files (incomplete downloads)
+- ✅ Files not in Internet Archive manifest
+- ✅ Entire item directories not in your item list
+- ✅ Files that don't match your filter criteria
+- ⚠️ README files (only if "Keep README files" is disabled)
+
+### Example: Remove All Non-MP3 Files
+
+```
+1. Item list: music_items.txt
+2. Download directory: /downloads
+3. Extensions: mp3
+4. Dry-run: ✓ (enabled)
+5. Click START CLEANING
+6. Review log - shows FLAC, M4A, etc. would be deleted
+7. Uncheck dry-run
+8. Click START CLEANING again
+9. Only MP3 files remain
+```
+
+### Safety Features
+
+- **Dry-run mode** enabled by default
+- **Confirmation dialog** before deletion
+- **Color-coded logging** for easy review
+- **Stop button** to interrupt operation
+- **Detailed reporting** of all changes
+
+### Integration with Main Downloader
+
+The cleaner uses the **same filter syntax** as the main downloader:
+
+| Feature | Main Downloader | Cleaner |
+|---------|----------------|---------|
+| Extension whitelist | Downloads only specified | Keeps only specified |
+| Regex filtering | Downloads matching | Keeps matching |
+| Metadata-only | Downloads metadata | Keeps metadata |
+| Anti-clutter | Skips system files | Removes system files |
+
+### Full Documentation
+
+See [CLEANER.md](CLEANER.md) for comprehensive documentation including:
+- Detailed usage guide
+- Filter examples
+- Best practices
+- Troubleshooting
+- FAQ
+
+### When to Use
+
+Run the cleaner when:
+- Changing format preferences after initial download
+- Removing stray `.part` files from interrupted downloads
+- Enforcing new filter criteria on existing collections
+- Cleaning up after updating your item list
+- Regular maintenance to remove accumulated strays
+
+**⚠️ Important**: Always start with dry-run mode enabled to preview changes before deletion.
+
 ## Troubleshooting
 
 ### Common Issues

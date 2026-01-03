@@ -558,6 +558,23 @@ MIT License - see LICENSE file for details
 - **Documentation**: See `SETUP.md` and `DOCKER.md`
 - **Logs**: Check `grabia_debug.log`
 
+## Support the Internet Archive ❤️
+
+The Internet Archive is a nonprofit digital library providing free access to millions of books, movies, software, music, and websites — and **grab-IA would not exist without their work**.
+
+If you find this project useful, please consider supporting the Internet Archive directly:
+
+👉 **Donate here:** https://archive.org/donate/
+
+Your contributions help:
+- Preserve cultural and historical artifacts
+- Maintain public access to knowledge
+- Keep archive.org free and available worldwide
+
+> grab-IA is an independent project and is not affiliated with or endorsed by the Internet Archive.
+> Donations go directly to the Internet Archive, not to this project.
+
+
 ---
 
 **grab-IA** - Because digital preservation matters. 🔥

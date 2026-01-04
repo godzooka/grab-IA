@@ -32,8 +32,8 @@ launch.bat
 
 #### Linux/macOS
 ```bash
-chmod +x launch.sh
-./launch.sh
+chmod +x launch.py
+./launch.py
 ```
 
 ### CLI Mode (Recommended for Servers)

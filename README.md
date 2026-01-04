@@ -20,34 +20,74 @@ A thread-safe, resilient downloader for Internet Archive items with GUI, CLI, an
 - **💾 Persistent State**: SQLite database tracks all downloads
 - **🚀 Production Ready**: Docker support for servers and Kubernetes
 
-## Quick Start
+ ## Quick Start
 
-### GUI Mode (Recommended for Desktop)
+ ### The easiest way (GUI)
 
-#### Windows
-```bash
-# Double-click launch.py
-launch.py
-```
+ Run the launcher. It will automatically set up everything and open the GUI.
 
-#### Linux/macOS
-```bash
-chmod +x launch.py
-./launch.py
-```
+ ```bash
+ python3 launch.py
+ ```
 
-### CLI Mode (Recommended for Servers)
+ Windows users (if `python3` is not available):
 
-```bash
-# Start a new job
-python grabia_cli.py start --items items.txt --output ./downloads --workers 8
+ ```bat
+ python launch.py
+ ```
 
-# Resume existing job
-python grabia_cli.py resume --output ./downloads
+ Optional (Linux / macOS):
 
-# Check status
-python grabia_cli.py status --output ./downloads
-```
+ ```bash
+ chmod +x launch.py
+ ./launch.py
+ ```
+
+ ---
+
+ ### Command-line usage (CLI)
+
+ Start a new download job:
+
+ ```bash
+ python3 grabia_cli.py start --items items.txt --output ./downloads
+ ```
+
+ Resume an existing job:
+
+ ```bash
+ python3 grabia_cli.py resume --output ./downloads
+ ```
+
+ Check job status:
+
+ ```bash
+ python3 grabia_cli.py status --output ./downloads
+ ```
+
+ ---
+
+ ### CLI convenience wrappers (optional)
+
+ Linux / macOS:
+
+ ```bash
+ ./grab-ia.sh start --items items.txt --output ./downloads
+ ```
+
+ Windows:
+
+ ```bat
+ grab-ia.bat start --items items.txt --output .\downloads
+ ```
+
+ ---
+
+ ### Notes
+
+ - GUI and CLI share the same job database (`grabia_state.db`)
+ - Jobs can be resumed across GUI and CLI
+ - Downloads are resumable and verified for integrity
 
 ### Docker (Recommended for Production)
 
@@ -72,7 +112,8 @@ docker run -it --rm \
 ### Method 1: Automated (Recommended)
 The launcher scripts automatically create a virtual environment and install dependencies.
 
-**No manual installation needed!** Just run `launch.bat` (Windows) or `./launch.sh` (Linux/macOS).
+**No manual installation needed!** Just run `python3 launch.py` (or `python launch.py` on Windows).
+
 
 ### Method 2: Manual
 ```bash
@@ -461,7 +502,7 @@ brew install python3                   # macOS
 
 #### Permission denied (Linux/macOS)
 ```bash
-chmod +x launch.sh
+chmod +x launch.py
 chmod +x grabia_cli.py
 ```
 
@@ -469,7 +510,7 @@ chmod +x grabia_cli.py
 ```bash
 # Delete and recreate
 rm -rf venv
-./launch.sh
+./launch.py
 ```
 
 #### Docker permission denied

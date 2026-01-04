@@ -26,8 +26,8 @@ A thread-safe, resilient downloader for Internet Archive items with GUI, CLI, an
 
 #### Windows
 ```bash
-# Double-click launch.bat
-launch.bat
+# Double-click launch.py
+launch.py
 ```
 
 #### Linux/macOS
